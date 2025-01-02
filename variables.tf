@@ -9,3 +9,7 @@ variable "web_subnet" {
   description = "Web subnet"
   type = string
 }
+
+variable "ssh_public_key" {
+  
+}
