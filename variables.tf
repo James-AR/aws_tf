@@ -13,3 +13,13 @@ variable "web_subnet" {
 variable "ssh_public_key" {
   
 }
+
+variable "azs" {
+  description = "AZs in the region"
+  type = list(string)
+  default = [
+    "us-west-1a",
+    "us-west-1b",
+    "us-west-1c"
+  ]
+}
