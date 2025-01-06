@@ -114,3 +114,8 @@ resource "aws_instance" "my_vm" {
     "Name" = "EC2 Instance - Amazon Linux 2"
   }
 }
+
+resource "aws_iam_user" "test" {
+  for_each = toset(var.users)
+  name = each.key
+}

@@ -23,3 +23,8 @@ variable "azs" {
     "us-west-1c"
   ]
 }
+
+variable "users" {
+  type = list(string)
+  default = [ "john", "jane", "james"]
+}
