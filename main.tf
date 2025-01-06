@@ -14,9 +14,7 @@ provider "aws" {
 # Create a VPC
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
-  tags = {
-    "Name" = "Main VPC"
-  }
+  tags = local.common-tags
 }
 
 # Create a subnet
@@ -24,9 +22,7 @@ resource "aws_subnet" "web" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.web_subnet
   availability_zone = var.azs[0]
-  tags = {
-    "Name" = "Web subnet"
-  }
+  tags = local.common-tags
 }
 
 resource "aws_internet_gateway" "my_web_igw" {
