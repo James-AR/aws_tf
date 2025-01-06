@@ -94,6 +94,7 @@ data "aws_ami" "latest_amazon_linux2" {
 resource "aws_instance" "my_vm" {
   ami = data.aws_ami.latest_amazon_linux2.id
   instance_type = "t2.micro"
+  count = var.is_test == true ? 1:0
   subnet_id = aws_subnet.web.id
   vpc_security_group_ids = [aws_default_security_group.default_sec_group.id]
   associate_public_ip_address = true
