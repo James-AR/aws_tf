@@ -4,6 +4,6 @@ locals {
   common-tags = {
     Name = "dev"
     Environment = "development"
-    Version = 1.10
+    Version = 1.0
   }
 }

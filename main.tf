@@ -29,6 +29,7 @@ resource "aws_internet_gateway" "my_web_igw" {
   vpc_id = aws_vpc.main.id
   tags = {
     "Name" = "Main VPC IGW"
+    "Version" = "${local.common-tags["Version"]}"
   }
 }
 
