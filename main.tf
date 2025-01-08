@@ -11,41 +11,12 @@ terraform {
 provider "aws" {
 }
 
-# Create a VPC
-resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr_block
-  tags = local.common-tags
-}
-
-# Create a subnet
-resource "aws_subnet" "web" {
-  vpc_id = aws_vpc.main.id
-  cidr_block = var.web_subnet
-  availability_zone = var.azs[0]
-  tags = local.common-tags
-}
-
-resource "aws_internet_gateway" "my_web_igw" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    "Name" = "Main VPC IGW"
-    "Version" = "${local.common-tags["Version"]}"
-  }
-}
-
-resource "aws_default_route_table" "main_vpc_default_rt" {
-  default_route_table_id = aws_vpc.main.default_route_table_id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my_web_igw.id
-  }
-  tags = {
-    "Name" = "Default RT"
-  }
+module "vpc" {
+  source = "./modules/vpc"
 }
 
 resource "aws_default_security_group" "default_sec_group" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = module.vpc.main_vpc_id
 
   dynamic "ingress" {
     for_each = var.ingress_ports
@@ -92,7 +63,7 @@ resource "aws_instance" "my_vm" {
   ami = data.aws_ami.latest_amazon_linux2.id
   instance_type = "t2.micro"
   count = var.is_test == true ? 1:0
-  subnet_id = aws_subnet.web.id
+  subnet_id = module.vpc.web_subnet_id
   vpc_security_group_ids = [aws_default_security_group.default_sec_group.id]
   associate_public_ip_address = true
   key_name = aws_key_pair.testing_ssh_key.key_name
